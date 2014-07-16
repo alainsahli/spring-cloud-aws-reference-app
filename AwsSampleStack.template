@@ -1,0 +1,11 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Sample stack for demonstrating features of elasticspring",
+    "Resources": {
+        "MessageProcessingQueue": {
+            "Type": "AWS::SQS::Queue",
+            "Properties": {
+            }
+        }
+    }
+}
