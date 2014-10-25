@@ -1,11 +1,7 @@
-package org.elasticspring.samples.web.model;
+package org.springframework.cloud.aws.sample.sqs;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 /**
  * @author Alain Sahli
@@ -28,5 +24,10 @@ public class MessageToProcess {
 
     public int getPriority() {
         return this.priority;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageToProcess{" + "message='" + message + '\'' + ", priority=" + priority + '}';
     }
 }

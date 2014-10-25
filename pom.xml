@@ -4,43 +4,46 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.elasticspring</groupId>
-    <artifactId>elasticspring-samples</artifactId>
+    <groupId>org.springframework.cloud.aws.sample</groupId>
+    <artifactId>spring-cloud-aws-reference-app</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
-    <modules>
-        <module>elasticspring-samples-service</module>
-        <module>elasticspring-samples-web</module>
-    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <elasticspring-version>0.1.0.SNAPSHOT</elasticspring-version>
+        <spring-cloud-aws-version>0.1.0.SNAPSHOT</spring-cloud-aws-version>
         <java.version>1.8</java.version>
-        <spring.version>4.1.0.BUILD-SNAPSHOT</spring.version>
+        <spring.version>4.1.1.RELEASE</spring.version>
+        <spring-boot-version>1.1.8.RELEASE</spring-boot-version>
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.1.4.RELEASE</version>
+        <version>1.1.8.RELEASE</version>
     </parent>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.elasticspring</groupId>
-                <artifactId>elasticspring-context</artifactId>
-                <version>${elasticspring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticspring</groupId>
-                <artifactId>elasticspring-messaging</artifactId>
-                <version>${elasticspring-version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud.aws</groupId>
+            <artifactId>spring-cloud-aws-context</artifactId>
+            <version>${spring-cloud-aws-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud.aws</groupId>
+            <artifactId>spring-cloud-aws-messaging</artifactId>
+            <version>${spring-cloud-aws-version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -50,13 +53,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>repository.spring.snapshot</id>
-            <name>Spring Snapshot Repository</name>
-            <url>http://repo.spring.io/snapshot</url>
-        </repository>
-    </repositories>
 
 </project>

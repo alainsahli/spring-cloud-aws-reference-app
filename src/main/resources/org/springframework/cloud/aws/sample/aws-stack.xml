@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aws-context="http://www.springframework.org/schema/cloud/aws/context"
+       xmlns:aws-messaging="http://www.springframework.org/schema/cloud/aws/messaging"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/cloud/aws/context
+                           http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.0.xsd
+                           http://www.springframework.org/schema/cloud/aws/messaging
+                           http://www.springframework.org/schema/cloud/aws/messaging/spring-cloud-aws-messaging-1.0.xsd">
+
+    <!-- Define global credentials for all the AWS clients -->
+    <aws-context:context-credentials>
+        <aws-context:simple-credentials access-key="${accessKey}" secret-key="${secretKey}"/>
+    </aws-context:context-credentials>
+
+    <!-- Define statically the region -->
+    <aws-context:context-region region="EU_CENTRAL_1" />
+
+    <aws-context:stack-configuration stack-name="AwsSampleStack" />
+    <aws-messaging:queue-messaging-template id="queueMessagingTemplate" />
+    <aws-messaging:annotation-driven-queue-listener />
+
+</beans>

@@ -1,2 +1,2 @@
-elasticspring-samples
-=====================
+Spring Cloud AWS Reference App
+==============================
