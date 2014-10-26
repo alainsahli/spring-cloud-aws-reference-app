@@ -6,7 +6,7 @@
     springCloudAws.directive('active', function ($location) {
         return {
             link: function (scope, element) {
-                function makeActiveIfMatchesCurrentPath () {
+                function makeActiveIfMatchesCurrentPath() {
                     if ($location.path().indexOf(element.find('a').attr('href').substr(1)) > -1) {
                         element.addClass('active');
                     } else {
@@ -54,7 +54,7 @@
             initMessageToProcess();
         };
 
-        function initView () {
+        function initView() {
             initMessageToProcess();
 
             var sock = new SockJS('/sqs-messages');
@@ -75,7 +75,7 @@
     });
 
     springCloudAws.filter('priority', function () {
-        return function(input) {
+        return function (input) {
             switch (input) {
                 case 1:
                     return 'Low';
@@ -85,6 +85,42 @@
                     return 'High';
             }
         }
+    });
+
+    // RDS
+    springCloudAws.service('PersonService', function ($http) {
+        this.add = function (person) {
+            return $http.post('persons', person);
+        };
+
+        this.getAll = function () {
+            return $http.get('persons');
+        }
+    });
+
+    springCloudAws.controller('RdsCtrl', function (PersonService) {
+        var self = this;
+        self.persons = [];
+
+        function initModel() {
+            self.model = {
+                firstName: undefined,
+                lastName: undefined
+            }
+        }
+
+        initModel();
+
+        self.add = function () {
+            PersonService.add(self.model);
+            initModel();
+        };
+
+        self.refresh = function () {
+            PersonService.getAll().then(function (response) {
+                self.persons = response.data;
+            })
+        };
     });
 
     springCloudAws.config(function ($routeProvider) {

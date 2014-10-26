@@ -1,22 +1,20 @@
 package org.springframework.cloud.aws.sample;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.aws.messaging.endpoint.NotificationMessageHandlerMethodArgumentResolver;
 import org.springframework.cloud.aws.messaging.endpoint.NotificationSubjectHandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-
-import java.util.List;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
  * @author Alain Sahli
  */
-// @Configuration
-// @EnableWebMvc
-public class MvcConfiguration extends WebMvcConfigurationSupport {
+@Component
+public class MvcConfiguration {
 
-    @Override
-    protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new NotificationMessageHandlerMethodArgumentResolver());
-        argumentResolvers.add(new NotificationSubjectHandlerMethodArgumentResolver());
+    @Autowired
+    public MvcConfiguration(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
+        requestMappingHandlerAdapter.getCustomArgumentResolvers().add(new NotificationMessageHandlerMethodArgumentResolver());
+        requestMappingHandlerAdapter.getCustomArgumentResolvers().add(new NotificationSubjectHandlerMethodArgumentResolver());
     }
 }
