@@ -1,6 +1,25 @@
 /* global angular,hljs */
 (function () {
-    var springCloudAws = angular.module('SpringCloudAws', []);
+    var springCloudAws = angular.module('SpringCloudAws', ['ngRoute']);
+
+    // Global stuff
+    springCloudAws.directive('active', function ($location) {
+        return {
+            link: function (scope, element) {
+                function makeActiveIfMatchesCurrentPath () {
+                    if ($location.path().indexOf(element.find('a').attr('href').substr(1)) > -1) {
+                        element.addClass('active');
+                    } else {
+                        element.removeClass('active');
+                    }
+                }
+
+                scope.$on('$routeChangeSuccess', function () {
+                    makeActiveIfMatchesCurrentPath();
+                });
+            }
+        };
+    });
 
     // SQS
     springCloudAws.service('SqsService', function ($http) {
@@ -55,6 +74,11 @@
         }
     });
 
+    springCloudAws.config(function ($routeProvider) {
+        $routeProvider.when('/home', {templateUrl: 'pages/home.tpl.html'});
+        $routeProvider.when('/sqs', {templateUrl: 'pages/sqs.tpl.html'});
+        $routeProvider.otherwise({redirectTo: '/home'});
+    });
     springCloudAws.run(function () {
         hljs.initHighlightingOnLoad();
     });
