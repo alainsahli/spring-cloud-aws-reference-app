@@ -38,7 +38,7 @@
             </div>
         </form>
         <div class="row">
-            <table class="table table-striped table-condensed" ng-show="sqs.model.responses.length > 0">
+            <table class="table table-striped table-condensed" ng-show="sqs.responses.length > 0">
                 <thead>
                 <tr>
                     <th>Received on</th>
@@ -47,10 +47,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="row in sqs.model.responses">
-                    <td>{{ row.receivedTimestamp | date : 'mediumTime' }}</td>
-                    <td>{{ row.messageToProcess.message }}</td>
-                    <td>{{ row.messageToProcess.priority | priority }}</td>
+                <tr ng-repeat="row in sqs.responses">
+                    <td>{{ row.timestamp | date : 'mediumTime' }}</td>
+                    <td>{{ row.data.message }}</td>
+                    <td>{{ row.data.priority | priority }}</td>
                 </tr>
                 </tbody>
             </table>

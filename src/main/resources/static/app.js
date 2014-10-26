@@ -40,7 +40,7 @@
     springCloudAws.controller('SqsCtrl', function (SqsService, $scope) {
         var self = this;
         self.model = {};
-        self.model.responses = [];
+        self.responses = [];
 
         function initMessageToProcess() {
             self.model.messageToProcess = {
@@ -60,13 +60,13 @@
             var sock = new SockJS('/sqs-messages');
             sock.onmessage = function (e) {
                 var jsonResponse = JSON.parse(e.data);
-                self.model.responses.reverse().push(jsonResponse);
+                self.responses.reverse().push(jsonResponse);
 
-                if (self.model.responses.length > 10) {
-                    self.model.responses = self.model.responses.slice(self.model.responses.length - 10);
+                if (self.responses.length > 10) {
+                    self.responses = self.responses.slice(self.responses.length - 10);
                 }
 
-                self.model.responses = self.model.responses.reverse();
+                self.responses = self.responses.reverse();
                 $scope.$apply();
             };
         }
@@ -87,6 +87,49 @@
         }
     });
 
+    // SNS
+    springCloudAws.service('SnsService', function ($http) {
+        this.send = function (message) {
+            return $http.post('sns/send', message);
+        };
+    });
+
+    springCloudAws.controller('SnsCtrl', function (SnsService, $scope) {
+        var self = this;
+        self.responses = [];
+
+        function initModel() {
+            self.model = {
+                message: undefined,
+                subject: undefined
+            };
+        }
+
+        self.send = function () {
+            SnsService.send(self.model);
+            initModel();
+        };
+
+        function initView() {
+            initModel();
+
+            var sock = new SockJS('/sns-messages');
+            sock.onmessage = function (e) {
+                var jsonResponse = JSON.parse(e.data);
+                self.responses.reverse().push(jsonResponse);
+
+                if (self.responses.length > 10) {
+                    self.responses = self.responses.slice(self.responses.length - 10);
+                }
+
+                self.responses = self.responses.reverse();
+                $scope.$apply();
+            };
+        }
+
+        initView();
+    });
+
     // RDS
     springCloudAws.service('PersonService', function ($http) {
         this.add = function (person) {
@@ -102,24 +145,28 @@
         var self = this;
         self.persons = [];
 
-        function initModel() {
+        function refresh() {
+            PersonService.getAll().then(function (response) {
+                self.persons = response.data;
+            });
+        }
+
+        refresh();
+
+        function initView() {
             self.model = {
                 firstName: undefined,
                 lastName: undefined
-            }
+            };
         }
 
-        initModel();
+        initView();
 
         self.add = function () {
-            PersonService.add(self.model);
-            initModel();
-        };
-
-        self.refresh = function () {
-            PersonService.getAll().then(function (response) {
-                self.persons = response.data;
-            })
+            PersonService.add(self.model).then(function () {
+                refresh();
+            });
+            initView();
         };
     });
 
