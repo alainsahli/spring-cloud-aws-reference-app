@@ -2,9 +2,7 @@ package org.springframework.cloud.aws.sample;
 
 import org.springframework.cloud.aws.messaging.endpoint.NotificationMessageHandlerMethodArgumentResolver;
 import org.springframework.cloud.aws.messaging.endpoint.NotificationSubjectHandlerMethodArgumentResolver;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.util.List;
@@ -12,8 +10,8 @@ import java.util.List;
 /**
  * @author Alain Sahli
  */
-@Configuration
-@EnableWebMvc
+// @Configuration
+// @EnableWebMvc
 public class MvcConfiguration extends WebMvcConfigurationSupport {
 
     @Override

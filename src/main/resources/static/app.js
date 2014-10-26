@@ -70,6 +70,8 @@
                 $scope.$apply();
             };
         }
+
+        initView();
     });
 
     springCloudAws.filter('priority', function () {
