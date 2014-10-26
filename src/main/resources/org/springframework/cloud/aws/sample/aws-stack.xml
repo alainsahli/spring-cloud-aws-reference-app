@@ -3,12 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aws-context="http://www.springframework.org/schema/cloud/aws/context"
        xmlns:aws-messaging="http://www.springframework.org/schema/cloud/aws/messaging"
+       xmlns:aws-jdbc="http://www.springframework.org/schema/cloud/aws/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/cloud/aws/context
                            http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.0.xsd
                            http://www.springframework.org/schema/cloud/aws/messaging
-                           http://www.springframework.org/schema/cloud/aws/messaging/spring-cloud-aws-messaging-1.0.xsd">
+                           http://www.springframework.org/schema/cloud/aws/messaging/spring-cloud-aws-messaging-1.0.xsd
+                           http://www.springframework.org/schema/cloud/aws/jdbc
+                           http://www.springframework.org/schema/cloud/aws/jdbc/spring-cloud-aws-jdbc-1.0.xsd">
 
     <!-- Define global credentials for all the AWS clients -->
     <aws-context:context-credentials>
@@ -22,4 +25,6 @@
     <aws-messaging:queue-messaging-template id="queueMessagingTemplate" />
     <aws-messaging:annotation-driven-queue-listener />
 
+    <!-- TODO: Add password to external configuration -->
+    <aws-jdbc:dataSource id="dataSource" db-instance-identifier="RdsInstance" password="verySecret"/>
 </beans>
