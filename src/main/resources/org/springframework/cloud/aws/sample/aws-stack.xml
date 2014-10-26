@@ -19,11 +19,17 @@
     </aws-context:context-credentials>
 
     <!-- Define statically the region -->
-    <aws-context:context-region region="EU_CENTRAL_1" />
+    <aws-context:context-region region="EU_CENTRAL_1"/>
 
-    <aws-context:stack-configuration stack-name="AwsSampleStack" />
-    <aws-messaging:queue-messaging-template id="queueMessagingTemplate" />
-    <aws-messaging:annotation-driven-queue-listener />
+    <!-- Cloud Formation Stack -->
+    <aws-context:stack-configuration stack-name="AwsSampleStack"/>
+
+    <!-- SQS -->
+    <aws-messaging:queue-messaging-template id="queueMessagingTemplate"/>
+    <aws-messaging:annotation-driven-queue-listener/>
+
+    <!-- SNS -->
+    <aws-messaging:notification-messaging-template id="notificationMessagingTemplate"/>
 
     <!-- TODO: Add password to external configuration -->
     <aws-jdbc:dataSource id="dataSource" db-instance-identifier="RdsInstance" password="verySecret"/>
