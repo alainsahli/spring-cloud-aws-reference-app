@@ -1,39 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="SpringCloudAws">
 <head>
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-route.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
-
+    <!-- libraries -->
+    <script src="lib/js/jquery-2.1.1.min.js"></script>
+    <script src="lib/js/angular.min.js"></script>
+    <script src="lib/js/angular-route.min.js"></script>
+    <script src="lib/js/sockjs.min.js"></script>
+    <script src="lib/js/highlight.min.js"></script>
     <script src="app.js"></script>
+
+    <link rel="stylesheet" href="lib/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/css/github.min.css">
+    <link rel="stylesheet" href="app.css">
 </head>
 <body role="document">
 
 <!-- Fixed navbar -->
-<div class="navbar navbar-inverse" role="navigation">
-    <div class="container">
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Spring Cloud AWS</a>
+            <a class="navbar-brand" href="#/home">Spring Cloud AWS</a>
         </div>
-        <div class="navbar-collapse collapse">
+        <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li active><a href="#/home">Home</a></li>
-                <li active><a href="#/sqs">SQS</a></li>
+                <li active><a href="#/home" class="home-icon"><span class="glyphicon glyphicon-home home-icon"></span></a></li>
+                <li active><a href="#/sqs"><img src="images/sqs-icon.svg" class="nav-icon" title="SQS"/></a></li>
+                <li active><a href="#/sns"><img src="images/sns-icon.svg" class="nav-icon" title="SNS"/></a></li>
+                <li active><a href="#/rds"><img src="images/rds-icon.svg" class="nav-icon" title="RDS"/></a></li>
+                <li active><a href="#/elasticache"><img src="images/elasticache-icon.svg" class="nav-icon"
+                                                        title="ElastiCache"/></a></li>
+                <li active><a href="#/ec2"><img src="images/ec2-icon.svg" class="nav-icon" title="EC2"/></a></li>
             </ul>
         </div>
     </div>
-</div>
+</nav>
 
 <div class="container" role="main" ng-view>
 
 </div>
 </body>
+</html>
