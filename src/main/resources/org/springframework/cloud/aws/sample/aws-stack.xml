@@ -15,7 +15,8 @@
 
     <!-- Define global credentials for all the AWS clients -->
     <aws-context:context-credentials>
-        <aws-context:simple-credentials access-key="${accessKey}" secret-key="${secretKey}"/>
+        <aws-context:instance-profile-credentials/>
+        <aws-context:simple-credentials access-key="${accessKey:}" secret-key="${secretKey:}"/>
     </aws-context:context-credentials>
 
     <!-- Define statically the region -->
