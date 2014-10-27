@@ -170,6 +170,19 @@
         };
     });
 
+    // ElastiCache
+    springCloudAws.service('ElastiCacheService', function ($http) {
+        this.getTimestamp = function () {
+            return $http.get('cache/timestamp');
+        };
+    });
+
+    springCloudAws.controller('ElastiCacheCtrl', function (ElastiCacheService) {
+        var self = this;
+
+
+    });
+
     springCloudAws.config(function ($routeProvider) {
         $routeProvider.when('/home', {templateUrl: 'pages/home.tpl.html'});
         $routeProvider.when('/sqs', {templateUrl: 'pages/sqs.tpl.html'});
