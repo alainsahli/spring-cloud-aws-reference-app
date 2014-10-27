@@ -122,6 +122,7 @@
                 }],
                 "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
                     "#!/bin/bash\n",
+                    "cd /home/ec2-user\n",
                     "wget https://s3.eu-central-1.amazonaws.com/demo-spring-cloud-aws/spring-cloud-aws-reference-app-1.0.0-SNAPSHOT.war -O application.jar","\n",
                     "nohup java -jar application.jar > application.log & \n","\n"
                 ]]}}
