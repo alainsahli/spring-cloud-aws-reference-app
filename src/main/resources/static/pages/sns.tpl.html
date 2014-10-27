@@ -34,7 +34,7 @@
             </div>
         </form>
         <div class="row">
-            <table class="table table-striped table-condensed" ng-show="sns.model.responses.length > 0">
+            <table class="table table-striped table-condensed" ng-show="sns.responses.length > 0">
                 <thead>
                 <tr>
                     <th>Received on</th>
@@ -43,8 +43,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="row in sns.model.responses">
-                    <td>{{ row.receivedTimestamp | date : 'mediumTime' }}</td>
+                <tr ng-repeat="row in sns.responses">
+                    <td>{{ row.timestamp | date : 'mediumTime' }}</td>
                     <td>{{ row.data.message }}</td>
                     <td>{{ row.data.subject }}</td>
                 </tr>
