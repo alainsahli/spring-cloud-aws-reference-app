@@ -45,7 +45,7 @@ public class SnsController {
         this.notificationMessagingTemplate.sendNotification("SnsTopic", notification.getMessage(), notification.getSubject());
     }
 
-    @NotificationSubscriptionMapping
+    @NotificationSubscriptionMapping("/receive")
     public void confirmSubscription(NotificationStatus notificationStatus) {
         notificationStatus.confirmSubscription();
     }
