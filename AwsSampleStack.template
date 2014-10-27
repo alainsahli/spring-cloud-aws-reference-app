@@ -139,7 +139,8 @@
                                     "sns:ListSubscriptionsByTopic",
                                     "sns:ListTopics",
                                     "sns:Subscribe",
-                                    "sns:Unsubscribe"
+                                    "sns:Unsubscribe",
+                                    "sns:Publish"
                                 ],
                                 "Resource": [
                                     "*"
