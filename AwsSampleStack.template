@@ -19,7 +19,7 @@
         "SubnetA" : {
             "Type" : "AWS::EC2::Subnet",
             "Properties" : {
-                "AvailabilityZone" : "eu-central-1a",
+                "AvailabilityZone" : "eu-west-1a",
                 "VpcId" : { "Ref" : "SampleStackVpc" },
                 "CidrBlock" : "10.0.0.0/24"
             }
@@ -27,7 +27,7 @@
         "SubnetB" : {
             "Type" : "AWS::EC2::Subnet",
             "Properties" : {
-                "AvailabilityZone" : "eu-central-1b",
+                "AvailabilityZone" : "eu-west-1b",
                 "VpcId" : { "Ref" : "SampleStackVpc" },
                 "CidrBlock" : "10.0.1.0/24"
             }
@@ -259,6 +259,38 @@
                         "Protocol": "http"
                     }
                 ]
+            }
+        },
+        "ElasticacheSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "DependsOn" : "WebSecurityGroup",
+            "Properties": {
+                "VpcId" : { "Ref" : "SampleStackVpc" },
+                "GroupDescription": "Elasticache Security Group",
+                "SecurityGroupIngress": [ {
+                    "IpProtocol": "tcp",
+                    "FromPort": "11211",
+                    "ToPort": "11211",
+                    "SourceSecurityGroupId": {"Ref": "WebSecurityGroup"}
+                } ]
+            }
+        },
+        "CacheCluster": {
+            "Type": "AWS::ElastiCache::CacheCluster",
+            "Properties": {
+                "AutoMinorVersionUpgrade": "true",
+                "Engine": "memcached",
+                "CacheNodeType": "cache.t2.micro",
+                "CacheSubnetGroupName" : { "Ref" : "CacheSubnetGroup" },
+                "NumCacheNodes": "1",
+                "VpcSecurityGroupIds": [{"Fn::GetAtt": [ "ElasticacheSecurityGroup", "GroupId"]}]
+            }
+        },
+        "CacheSubnetGroup" : {
+            "Type" : "AWS::ElastiCache::SubnetGroup",
+            "Properties" : {
+                "Description" : "Subnet group",
+                "SubnetIds" : [  { "Ref" : "SubnetA" },{ "Ref" : "SubnetB" }  ]
             }
         }
     }
