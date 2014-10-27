@@ -21,6 +21,7 @@ import java.io.IOException;
  * @author Alain Sahli
  */
 @RestController
+@RequestMapping("/sns")
 public class SnsController {
 
     private static Logger LOG = LoggerFactory.getLogger(SnsController.class);
@@ -36,7 +37,7 @@ public class SnsController {
         this.snsSendingTextWebSocketHandler = snsSendingTextWebSocketHandler;
     }
 
-    @RequestMapping(value = "/sns/send", method = RequestMethod.POST)
+    @RequestMapping(value = "/send", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void sendNotification(@RequestBody SnsNotification notification) {
         LOG.debug("Going to send notification {}", notification);
@@ -44,12 +45,12 @@ public class SnsController {
         this.notificationMessagingTemplate.sendNotification("SnsTopic", notification.getMessage(), notification.getSubject());
     }
 
-    @NotificationSubscriptionMapping("/sns/receive")
+    @NotificationSubscriptionMapping("/receive")
     public void confirmSubscription(NotificationStatus notificationStatus) {
         notificationStatus.confirmSubscription();
     }
 
-    @NotificationMessageMapping("/sns/receive")
+    @NotificationMessageMapping("/receive")
     public void receiveNotification(@NotificationMessage String message, @NotificationSubject String subject) {
         LOG.debug("Received SNS message {} with subject {}", message, subject);
 
