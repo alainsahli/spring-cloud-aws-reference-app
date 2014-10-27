@@ -23,18 +23,18 @@ public class ApplicationInfoBean {
 
 
     public String getAmiId() {
-        return amiId;
+        return this.amiId;
     }
 
     public String getHostname() {
-        return hostname;
+        return this.hostname;
     }
 
     public String getInstanceType() {
-        return instanceType;
+        return this.instanceType;
     }
 
     public String getServiceDomain() {
-        return serviceDomain;
+        return this.serviceDomain;
     }
 }
