@@ -7,6 +7,20 @@
             "Properties": {
             }
         },
+        "SnsTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "Subscription": [
+                    {
+                        "Endpoint": { "Fn::Join" : [
+                            { "Fn::GetAtt" : [ "SpringBootServer", "PublicDnsName" ]},
+                            ":8080/sns/receive"
+                        ] },
+                        "Protocol": "http"
+                    }
+                ]
+            }
+        },
         "SampleStackVpc" : {
             "Type" : "AWS::EC2::VPC",
             "Properties" : {
