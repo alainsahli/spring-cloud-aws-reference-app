@@ -172,18 +172,19 @@
 
     // ElastiCache
     springCloudAws.service('ElastiCacheService', function ($http) {
-        this.getValue = function () {
-            return $http.get('cachedService', {headers: {Accept: 'text/plain'}});
+        this.getValue = function (key) {
+            return $http.get('cachedService?key=' + key, {headers: {Accept: 'text/plain'}});
         };
     });
 
     springCloudAws.controller('ElastiCacheCtrl', function ($scope, ElastiCacheService) {
         var self = this;
         self.loading = false;
+
         self.getValue = function () {
             self.value = '';
             self.loading = true;
-            ElastiCacheService.getValue().then(function (response) {
+            ElastiCacheService.getValue(self.key).then(function (response) {
                 self.loading = false;
                 self.value = response.data;
             });
