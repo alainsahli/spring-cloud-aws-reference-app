@@ -8,8 +8,6 @@ import org.springframework.cloud.aws.messaging.config.annotation.NotificationMes
 import org.springframework.cloud.aws.messaging.config.annotation.NotificationSubject;
 import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate;
 import org.springframework.cloud.aws.messaging.endpoint.NotificationStatus;
-import org.springframework.cloud.aws.messaging.endpoint.annotation.NotificationMessageMapping;
-import org.springframework.cloud.aws.messaging.endpoint.annotation.NotificationSubscriptionMapping;
 import org.springframework.cloud.aws.sample.websocket.DataWithTimestamp;
 import org.springframework.cloud.aws.sample.websocket.SendingTextWebSocketHandler;
 import org.springframework.http.HttpStatus;
@@ -45,12 +43,14 @@ public class SnsController {
         this.notificationMessagingTemplate.sendNotification("SnsTopic", notification.getMessage(), notification.getSubject());
     }
 
-    @NotificationSubscriptionMapping("/receive")
+    // @NotificationSubscriptionMapping("/receive")
+    @RequestMapping(value = "/receive", headers = "x-amz-sns-message-type=SubscriptionConfirmation", method = RequestMethod.POST)
     public void confirmSubscription(NotificationStatus notificationStatus) {
         notificationStatus.confirmSubscription();
     }
 
-    @NotificationMessageMapping("/receive")
+    //    @NotificationMessageMapping("/receive")
+    @RequestMapping(value = "/receive", headers = "x-amz-sns-message-type=Notification", method = RequestMethod.POST)
     public void receiveNotification(@NotificationMessage String message, @NotificationSubject String subject) {
         LOG.debug("Received SNS message {} with subject {}", message, subject);
 
