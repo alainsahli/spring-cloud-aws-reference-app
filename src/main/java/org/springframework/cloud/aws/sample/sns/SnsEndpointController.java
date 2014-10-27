@@ -11,6 +11,7 @@ import org.springframework.cloud.aws.messaging.endpoint.annotation.NotificationM
 import org.springframework.cloud.aws.messaging.endpoint.annotation.NotificationSubscriptionMapping;
 import org.springframework.cloud.aws.sample.websocket.DataWithTimestamp;
 import org.springframework.cloud.aws.sample.websocket.SendingTextWebSocketHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.io.IOException;
  * @author Alain Sahli
  */
 @RestController
+@RequestMapping("/sns/receive")
 public class SnsEndpointController {
 
     private static Logger LOG = LoggerFactory.getLogger(SnsEndpointController.class);
@@ -30,12 +32,12 @@ public class SnsEndpointController {
         this.snsSendingTextWebSocketHandler = snsSendingTextWebSocketHandler;
     }
 
-    @NotificationSubscriptionMapping("/sns/receive")
+    @NotificationSubscriptionMapping
     public void confirmSubscription(NotificationStatus notificationStatus) {
         notificationStatus.confirmSubscription();
     }
 
-    @NotificationMessageMapping("/sns/receive")
+    @NotificationMessageMapping
     public void receiveNotification(@NotificationMessage String message, @NotificationSubject String subject) {
         LOG.debug("Received SNS message {} with subject {}", message, subject);
 
