@@ -7,20 +7,6 @@
             "Properties": {
             }
         },
-        "SnsTopic": {
-            "Type": "AWS::SNS::Topic",
-            "Properties": {
-                "Subscription": [
-                    {
-                        "Endpoint": { "Fn::Join" : [
-                            { "Fn::GetAtt" : [ "SpringBootServer", "PublicDnsName" ]},
-                            ":8080/sns/receive"
-                        ] },
-                        "Protocol": "http"
-                    }
-                ]
-            }
-        },
         "SampleStackVpc" : {
             "Type" : "AWS::EC2::VPC",
             "Properties" : {
@@ -101,56 +87,6 @@
             "Properties" : {
                 "DBSubnetGroupDescription" : "description",
                 "SubnetIds" : [ { "Ref" : "SubnetA" },{ "Ref" : "SubnetB" }  ]
-            }
-        },
-        "RdsInstance": {
-            "Type": "AWS::RDS::DBInstance",
-            "Properties": {
-                "AllocatedStorage": "5",
-                "AvailabilityZone": { "Fn::GetAtt" : [ "SubnetA", "AvailabilityZone" ] } ,
-                "DBInstanceClass": "db.t2.micro",
-                "DBName": "reference",
-                "DBSubnetGroupName" : {"Ref" : "SampleStackSubnetGroup"},
-                "Engine": "mysql",
-                "MasterUsername": "admin",
-                "MasterUserPassword": "verySecret",
-                "PubliclyAccessible": true,
-                "VPCSecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" }  ]
-            }
-        },
-        "SpringBootServer": {
-            "Type": "AWS::EC2::Instance",
-            "Properties": {
-                "AvailabilityZone": { "Fn::GetAtt" : [ "SubnetA", "AvailabilityZone" ] } ,
-                "IamInstanceProfile": {
-                    "Ref": "ApplicationInstanceProfile"
-                },
-                "ImageId": "ami-b43503a9",
-                "InstanceType": "t2.micro",
-                "KeyName": "eu-central-1",
-                "NetworkInterfaces" : [ {
-                   "AssociatePublicIpAddress" : true,
-                   "DeviceIndex" : "0",
-                   "GroupSet" : [{"Ref": "WebSecurityGroup" }],
-                   "SubnetId" : { "Ref" : "SubnetA" }
-                }],
-                "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
-                    "#!/bin/bash\n",
-                    "cd /home/ec2-user\n",
-                    "wget https://s3.eu-central-1.amazonaws.com/demo-spring-cloud-aws/spring-cloud-aws-reference-app-1.0.0-SNAPSHOT.war -O application.jar","\n",
-                    "nohup java -jar application.jar > application.log & \n","\n"
-                ]]}}
-            }
-        },
-        "WebSecurityGroup" : {
-            "Type" : "AWS::EC2::SecurityGroup",
-            "Properties" : {
-                "VpcId" : { "Ref" : "SampleStackVpc" },
-                "GroupDescription" : "Web Security Group",
-                "SecurityGroupIngress" : [
-                    {"IpProtocol" : "tcp", "FromPort" : "8080", "ToPort" : "8080", "CidrIp" : "0.0.0.0/0"},
-                    {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "46.237.207.188/32"}
-                ]
             }
         },
         "ApplicationRole": {
@@ -255,6 +191,73 @@
                 "Roles": [ {
                     "Ref": "ApplicationRole"
                 } ]
+            }
+        },
+        "WebSecurityGroup" : {
+            "Type" : "AWS::EC2::SecurityGroup",
+            "Properties" : {
+                "VpcId" : { "Ref" : "SampleStackVpc" },
+                "GroupDescription" : "Web Security Group",
+                "SecurityGroupIngress" : [
+                    {"IpProtocol" : "tcp", "FromPort" : "8080", "ToPort" : "8080", "CidrIp" : "0.0.0.0/0"},
+                    {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "46.237.207.188/32"}
+                ]
+            }
+        },
+        "RdsInstance": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "AllocatedStorage": "5",
+                "AvailabilityZone": { "Fn::GetAtt" : [ "SubnetA", "AvailabilityZone" ] } ,
+                "DBInstanceClass": "db.t2.micro",
+                "DBName": "reference",
+                "DBSubnetGroupName" : {"Ref" : "SampleStackSubnetGroup"},
+                "Engine": "mysql",
+                "MasterUsername": "admin",
+                "MasterUserPassword": "verySecret",
+                "PubliclyAccessible": true,
+                "VPCSecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" }  ]
+            }
+        },
+        "SpringBootServer": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn" : "RdsInstance",
+            "Properties": {
+                "AvailabilityZone": { "Fn::GetAtt" : [ "SubnetA", "AvailabilityZone" ] } ,
+                "IamInstanceProfile": {
+                    "Ref": "ApplicationInstanceProfile"
+                },
+                "ImageId": "ami-b43503a9",
+                "InstanceType": "t2.micro",
+                "KeyName": "eu-central-1",
+                "NetworkInterfaces" : [ {
+                   "AssociatePublicIpAddress" : true,
+                   "DeviceIndex" : "0",
+                   "GroupSet" : [{"Ref": "WebSecurityGroup" }],
+                   "SubnetId" : { "Ref" : "SubnetA" }
+                }],
+                "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+                    "#!/bin/bash\n",
+                    "cd /home/ec2-user\n",
+                    "wget https://s3.eu-central-1.amazonaws.com/demo-spring-cloud-aws/spring-cloud-aws-reference-app-1.0.0-SNAPSHOT.war -O application.jar","\n",
+                    "nohup java -jar application.jar > application.log & \n","\n"
+                ]]}}
+            }
+        },
+        "SnsTopic": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn" : "SpringBootServer",
+            "Properties": {
+                "Subscription": [
+                    {
+                        "Endpoint": { "Fn::Join" : ["",[
+                            "http://",
+                            { "Fn::GetAtt" : [ "SpringBootServer", "PublicDnsName" ]},
+                            ":8080/sns/receive"]
+                        ] },
+                        "Protocol": "http"
+                    }
+                ]
             }
         }
     }
