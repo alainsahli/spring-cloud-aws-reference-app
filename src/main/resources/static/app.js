@@ -6,7 +6,7 @@
     springCloudAws.directive('active', function ($location) {
         return {
             link: function (scope, element) {
-                function makeActiveIfMatchesCurrentPath () {
+                function makeActiveIfMatchesCurrentPath() {
                     if ($location.path().indexOf(element.find('a').attr('href').substr(1)) > -1) {
                         element.addClass('active');
                     } else {
@@ -40,7 +40,7 @@
     springCloudAws.controller('SqsCtrl', function (SqsService, $scope) {
         var self = this;
         self.model = {};
-        self.model.responses = [];
+        self.responses = [];
 
         function initMessageToProcess() {
             self.model.messageToProcess = {
@@ -54,19 +54,19 @@
             initMessageToProcess();
         };
 
-        function initView () {
+        function initView() {
             initMessageToProcess();
 
             var sock = new SockJS('/sqs-messages');
             sock.onmessage = function (e) {
                 var jsonResponse = JSON.parse(e.data);
-                self.model.responses.reverse().push(jsonResponse);
+                self.responses.reverse().push(jsonResponse);
 
-                if (self.model.responses.length > 10) {
-                    self.model.responses = self.model.responses.slice(self.model.responses.length - 10);
+                if (self.responses.length > 10) {
+                    self.responses = self.responses.slice(self.responses.length - 10);
                 }
 
-                self.model.responses = self.model.responses.reverse();
+                self.responses = self.responses.reverse();
                 $scope.$apply();
             };
         }
@@ -75,7 +75,7 @@
     });
 
     springCloudAws.filter('priority', function () {
-        return function(input) {
+        return function (input) {
             switch (input) {
                 case 1:
                     return 'Low';
@@ -85,6 +85,89 @@
                     return 'High';
             }
         }
+    });
+
+    // SNS
+    springCloudAws.service('SnsService', function ($http) {
+        this.send = function (message) {
+            return $http.post('sns/send', message);
+        };
+    });
+
+    springCloudAws.controller('SnsCtrl', function (SnsService, $scope) {
+        var self = this;
+        self.responses = [];
+
+        function initModel() {
+            self.model = {
+                message: undefined,
+                subject: undefined
+            };
+        }
+
+        self.send = function () {
+            SnsService.send(self.model);
+            initModel();
+        };
+
+        function initView() {
+            initModel();
+
+            var sock = new SockJS('/sns-messages');
+            sock.onmessage = function (e) {
+                var jsonResponse = JSON.parse(e.data);
+                self.responses.reverse().push(jsonResponse);
+
+                if (self.responses.length > 10) {
+                    self.responses = self.responses.slice(self.responses.length - 10);
+                }
+
+                self.responses = self.responses.reverse();
+                $scope.$apply();
+            };
+        }
+
+        initView();
+    });
+
+    // RDS
+    springCloudAws.service('PersonService', function ($http) {
+        this.add = function (person) {
+            return $http.post('persons', person);
+        };
+
+        this.getAll = function () {
+            return $http.get('persons');
+        }
+    });
+
+    springCloudAws.controller('RdsCtrl', function (PersonService) {
+        var self = this;
+        self.persons = [];
+
+        function refresh() {
+            PersonService.getAll().then(function (response) {
+                self.persons = response.data;
+            });
+        }
+
+        refresh();
+
+        function initView() {
+            self.model = {
+                firstName: undefined,
+                lastName: undefined
+            };
+        }
+
+        initView();
+
+        self.add = function () {
+            PersonService.add(self.model).then(function () {
+                refresh();
+            });
+            initView();
+        };
     });
 
     springCloudAws.config(function ($routeProvider) {

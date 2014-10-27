@@ -5,6 +5,122 @@
 
     <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn more »</a></p>
 </div>
-<p>
+<div class="panel panel-primary" ng-controller="SnsCtrl as sns">
+    <div class="panel-heading">
+        <h3 class="panel-title">SNS Support</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" role="form" name="topicForm">
+            <div class="form-group">
+                <label for="message" class="col-sm-2 control-label">Message</label>
 
-</p>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="message" placeholder="Message..."
+                           ng-model="sns.model.message" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="subject" class="col-sm-2 control-label">Subject</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="subject" placeholder="Subject..."
+                           ng-model="sns.model.subject" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-click="sns.send()" class="btn btn-default" ng-disabled="topicForm.$invalid">Send</button>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <table class="table table-striped table-condensed" ng-show="sns.model.responses.length > 0">
+                <thead>
+                <tr>
+                    <th>Received on</th>
+                    <th>Message</th>
+                    <th>Subject</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in sns.model.responses">
+                    <td>{{ row.receivedTimestamp | date : 'mediumTime' }}</td>
+                    <td>{{ row.data.message }}</td>
+                    <td>{{ row.data.subject }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">SNS message sending</h3>
+                    </div>
+                    <div class="panel-body">
+<pre>
+<code>
+@RequestMapping(value = "/send", method = RequestMethod.POST)
+@ResponseStatus(HttpStatus.OK)
+public void sendNotification(@RequestBody SnsNotification notification) {
+    LOG.debug("Going to send notification {}", notification);
+
+    this.notificationMessagingTemplate.sendNotification("SnsTopic", notification.getMessage(), notification.getSubject());
+}
+</code>
+</pre>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/java/org/springframework/cloud/aws/sample/sns/SnsController.java#L30">View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">SNS notification endpoint for new messages</h3>
+                    </div>
+                    <div class="panel-body">
+<pre>
+<code>
+@NotificationMessageMapping("/receive")
+public void receiveNotification(@NotificationMessage String message, @NotificationSubject String subject) {
+    LOG.debug("Received SQS message {} with subject {}", message, subject);
+
+    try {
+        this.snsSendingTextWebSocketHandler.broadcastToSessions(new DataWithTimestamp<>(new SnsNotification(subject, message)));
+    } catch (IOException e) {
+        LOG.error("Was not able to push the message to the client.", e);
+    }
+}
+</code>
+</pre>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/java/org/springframework/cloud/aws/sample/sns/SnsReceivingMessageHandler.java#L39">View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Configuration</h3>
+                    </div>
+                    <div class="panel-body">
+<pre>
+<code class="xml">
+</code>
+</pre>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/resources/org/springframework/cloud/aws/sample/aws-stack.xml#L22">View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
