@@ -1,4 +1,4 @@
-package org.springframework.cloud.aws.sample;
+package org.springframework.cloud.aws.sample.sns;
 
 import com.amazonaws.services.sns.AmazonSNS;
 import org.springframework.beans.BeansException;
@@ -19,7 +19,7 @@ import java.util.List;
  * @author Alain Sahli
  */
 @Component
-public class MvcConfiguration implements BeanFactoryPostProcessor {
+public class NotificationResolversConfiguration implements BeanFactoryPostProcessor {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
