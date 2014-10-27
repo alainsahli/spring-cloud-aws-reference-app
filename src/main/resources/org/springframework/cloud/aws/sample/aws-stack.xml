@@ -5,7 +5,6 @@
        xmlns:aws-messaging="http://www.springframework.org/schema/cloud/aws/messaging"
        xmlns:aws-jdbc="http://www.springframework.org/schema/cloud/aws/jdbc"
        xmlns:aws-cache="http://www.springframework.org/schema/cloud/aws/cache"
-       xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/cloud/aws/context
@@ -15,7 +14,7 @@
                            http://www.springframework.org/schema/cloud/aws/jdbc
                            http://www.springframework.org/schema/cloud/aws/jdbc/spring-cloud-aws-jdbc-1.0.xsd
                            http://www.springframework.org/schema/cloud/aws/cache
-                           http://www.springframework.org/schema/cloud/aws/cache/spring-cloud-aws-cache-1.0.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+                           http://www.springframework.org/schema/cloud/aws/cache/spring-cloud-aws-cache-1.0.xsd">
 
     <!-- Define global credentials for all the AWS clients -->
     <aws-context:context-credentials>
@@ -24,7 +23,7 @@
     </aws-context:context-credentials>
 
     <!-- Define statically the region -->
-    <aws-context:context-region region="EU_WEST_1"/>
+    <aws-context:context-region region="EU_CENTRAL_1"/>
 
     <!-- Cloud Formation Stack -->
     <aws-context:stack-configuration stack-name="AwsSampleStack"/>
@@ -39,9 +38,10 @@
     <!-- TODO: Add password to external configuration -->
     <aws-jdbc:dataSource id="dataSource" db-instance-identifier="RdsInstance" password="verySecret"/>
 
-    <aws-cache:cache-manager>
-        <aws-cache:cache-cluster name="SampleCache" expiration="2"/>
-    </aws-cache:cache-manager>
+    <beans profile="!local">
+        <aws-cache:cache-manager>
+            <aws-cache:cache-cluster name="SampleCache" expiration="10"/>
+        </aws-cache:cache-manager>
+    </beans>
 
-    <cache:annotation-driven/>
 </beans>
