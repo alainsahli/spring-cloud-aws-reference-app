@@ -21,11 +21,28 @@
         };
     });
 
-    springCloudAws.directive('code', function () {
+    springCloudAws.service('SourceCodeService', function ($http) {
+        this.getSourceCode = function (path) {
+            return $http.get('source?path=' + path);
+        };
+    });
+
+    springCloudAws.directive('sourceCode', function (SourceCodeService, $timeout) {
         return {
             restrict: 'E',
+            templateUrl: 'templates/source-box.tpl.html',
+            scope: {
+                path: '@'
+            },
             link: function (scope, element) {
-                hljs.highlightBlock(element[0]);
+                SourceCodeService.getSourceCode(scope.path).then(function (response) {
+                    scope.code = response.data.content;
+                    scope.link = response.data.url;
+                    scope.title = response.data.url.substr(response.data.url.lastIndexOf('/') + 1);
+                    $timeout(function () {
+                        hljs.highlightBlock(element.find('code')[0]);
+                    });
+                });
             }
         }
     });

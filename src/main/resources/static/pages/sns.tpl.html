@@ -51,76 +51,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">SNS message sending</h3>
-                    </div>
-                    <div class="panel-body">
-<pre>
-<code>
-@RequestMapping(value = "/send", method = RequestMethod.POST)
-@ResponseStatus(HttpStatus.OK)
-public void sendNotification(@RequestBody SnsNotification notification) {
-    LOG.debug("Going to send notification {}", notification);
-
-    this.notificationMessagingTemplate.sendNotification("SnsTopic", notification.getMessage(), notification.getSubject());
-}
-</code>
-</pre>
-                    </div>
-                    <div class="panel-footer">
-                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/java/org/springframework/cloud/aws/sample/sns/SnsController.java#L30">View on GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">SNS notification endpoint for new messages</h3>
-                    </div>
-                    <div class="panel-body">
-<pre>
-<code>
-@NotificationMessageMapping("/receive")
-public void receiveNotification(@NotificationMessage String message, @NotificationSubject String subject) {
-    LOG.debug("Received SQS message {} with subject {}", message, subject);
-
-    try {
-        this.snsSendingTextWebSocketHandler.broadcastToSessions(new DataWithTimestamp<>(new SnsNotification(subject, message)));
-    } catch (IOException e) {
-        LOG.error("Was not able to push the message to the client.", e);
-    }
-}
-</code>
-</pre>
-                    </div>
-                    <div class="panel-footer">
-                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/java/org/springframework/cloud/aws/sample/sns/SnsReceivingMessageHandler.java#L39">View on GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Configuration</h3>
-                    </div>
-                    <div class="panel-body">
-<pre>
-<code class="xml">
-</code>
-</pre>
-                    </div>
-                    <div class="panel-footer">
-                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/resources/org/springframework/cloud/aws/sample/aws-stack.xml#L22">View on GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <source-code path="src/main/java/org/springframework/cloud/aws/sample/sns/SnsController.java"></source-code>
+        <source-code path="src/main/java/org/springframework/cloud/aws/sample/sns/SnsEndpointController.java"></source-code>
+        <source-code path="src/main/resources/org/springframework/cloud/aws/sample/aws-stack.xml"></source-code>
     </div>
 </div>

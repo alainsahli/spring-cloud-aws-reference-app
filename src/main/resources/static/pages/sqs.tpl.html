@@ -33,7 +33,9 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-click="sqs.sendMessage()" class="btn btn-default" ng-disabled="messageForm.$invalid">Send</button>
+                    <button ng-click="sqs.sendMessage()" class="btn btn-default" ng-disabled="messageForm.$invalid">
+                        Send
+                    </button>
                 </div>
             </div>
         </form>
@@ -55,77 +57,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">SQS Message Sending</h3>
-                    </div>
-                    <div class="panel-body">
-<pre>
-<code>
-@RequestMapping(value = "/message-processing-queue", method = RequestMethod.POST)
-@ResponseStatus(HttpStatus.OK)
-public void sendMessageToMessageProcessingQueue(@RequestBody MessageToProcess message) {
-    LOG.debug("Going to send message {} over SQS", message);
-
-    this.queueMessagingTemplate.convertAndSend(QUEUE_NAME, message);
-}
-</code>
-</pre>
-                    </div>
-                    <div class="panel-footer">
-                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/java/org/springframework/cloud/aws/sample/sqs/SqsController.java#L30">View on GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">SQS Polling for new messages</h3>
-                    </div>
-                    <div class="panel-body">
-<pre>
-<code>
-@MessageMapping(QUEUE_NAME)
-private void receiveMessage(MessageToProcess message,
-                            @Header("ApproximateFirstReceiveTimestamp") String approximateFirstReceiveTimestamp) {
-    try {
-        sendMessageToClient(new MessageWithReceiveTimestamp(message, approximateFirstReceiveTimestamp));
-    } catch (IOException e) {
-        LOG.error("Was not able to push the message to the client.", e);
-    }
-}
-</code>
-</pre>
-                    </div>
-                    <div class="panel-footer">
-                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/java/org/springframework/cloud/aws/sample/sqs/SqsReceivingMessageHandler.java#L39">View on GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Configuration</h3>
-                    </div>
-                    <div class="panel-body">
-<pre>
-<code class="xml">
-&lt;aws-messaging:queue-messaging-template id="queueMessagingTemplate" /&gt;
-&lt;aws-messaging:annotation-driven-queue-listener /&gt;
-</code>
-</pre>
-                    </div>
-                    <div class="panel-footer">
-                        <a href="https://github.com/alainsahli/spring-aws-samples/blob/master/src/main/resources/org/springframework/cloud/aws/sample/aws-stack.xml#L22">View on GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <source-code path="src/main/java/org/springframework/cloud/aws/sample/sqs/SqsController.java"></source-code>
+        <source-code path="src/main/resources/org/springframework/cloud/aws/sample/aws-stack.xml"></source-code>
     </div>
 </div>
