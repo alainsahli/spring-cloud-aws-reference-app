@@ -228,9 +228,9 @@
                 "IamInstanceProfile": {
                     "Ref": "ApplicationInstanceProfile"
                 },
-                "ImageId": "ami-b43503a9",
+                "ImageId": "ami-6e7bd919",
                 "InstanceType": "t2.micro",
-                "KeyName": "eu-central-1",
+                "KeyName": "eu-west-1",
                 "NetworkInterfaces" : [ {
                    "AssociatePublicIpAddress" : true,
                    "DeviceIndex" : "0",
