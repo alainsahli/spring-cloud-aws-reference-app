@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.aws.messaging.config.annotation.NotificationMessage;
 import org.springframework.cloud.aws.messaging.config.annotation.NotificationSubject;
 import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate;
+import org.springframework.cloud.aws.messaging.endpoint.NotificationStatus;
 import org.springframework.cloud.aws.messaging.endpoint.annotation.NotificationMessageMapping;
+import org.springframework.cloud.aws.messaging.endpoint.annotation.NotificationSubscriptionMapping;
 import org.springframework.cloud.aws.sample.websocket.DataWithTimestamp;
 import org.springframework.cloud.aws.sample.websocket.SendingTextWebSocketHandler;
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,11 @@ public class SnsController {
         LOG.debug("Going to send notification {}", notification);
 
         this.notificationMessagingTemplate.sendNotification("SnsTopic", notification.getMessage(), notification.getSubject());
+    }
+
+    @NotificationSubscriptionMapping
+    public void confirmSubscription(NotificationStatus notificationStatus) {
+        notificationStatus.confirmSubscription();
     }
 
     @NotificationMessageMapping("/receive")
