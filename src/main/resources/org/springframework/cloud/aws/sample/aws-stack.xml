@@ -23,7 +23,7 @@
     </aws-context:context-credentials>
 
     <!-- Define statically the region -->
-    <aws-context:context-region region="EU_CENTRAL_1"/>
+    <aws-context:context-region region="EU_WEST_1"/>
 
     <!-- Cloud Formation Stack -->
     <aws-context:stack-configuration stack-name="AwsSampleStack"/>
@@ -38,10 +38,11 @@
     <!-- TODO: Add password to external configuration -->
     <aws-jdbc:dataSource id="dataSource" db-instance-identifier="RdsInstance" password="verySecret"/>
 
+    <aws-context:context-instance-placeholder/>
+
     <beans profile="!local">
         <aws-cache:cache-manager>
-            <aws-cache:cache-cluster name="SampleCache" expiration="10"/>
+            <aws-cache:cache-cluster name="CacheCluster" expiration="10"/>
         </aws-cache:cache-manager>
     </beans>
-
 </beans>
