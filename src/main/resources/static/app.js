@@ -190,6 +190,21 @@
         };
     });
 
+    // EC2
+    springCloudAws.service('Ec2Service', function ($http) {
+        this.getProperties = function () {
+            return $http.get('');
+        };
+    });
+
+    springCloudAws.controller('Ec2Ctrl', function (Ec2Service) {
+        var self = this;
+
+        Ec2Service.getProperties().then(function (response) {
+            self.properties = response.data;
+        });
+    });
+
     springCloudAws.config(function ($routeProvider) {
         $routeProvider.when('/home', {templateUrl: 'pages/home.tpl.html'});
         $routeProvider.when('/sqs', {templateUrl: 'pages/sqs.tpl.html'});
