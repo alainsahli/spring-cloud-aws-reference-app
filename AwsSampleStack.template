@@ -1,6 +1,13 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Sample stack for demonstrating features of Spring Cloud AWS",
+    "Parameters": {
+        "RdsPassword": {
+            "Description": "The master password for the RDS instance",
+            "Type": "String",
+            "MinLength": 8
+        }
+    },
     "Resources": {
         "MessageProcessingQueue": {
             "Type": "AWS::SQS::Queue",
@@ -215,7 +222,7 @@
                 "DBSubnetGroupName" : {"Ref" : "SampleStackSubnetGroup"},
                 "Engine": "mysql",
                 "MasterUsername": "admin",
-                "MasterUserPassword": "verySecret",
+                "MasterUserPassword": { "Ref": "RdsPassword" },
                 "PubliclyAccessible": true,
                 "VPCSecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" }  ]
             }
@@ -241,7 +248,9 @@
                     "#!/bin/bash\n",
                     "cd /home/ec2-user\n",
                     "wget https://s3.amazonaws.com/repo.elasticspring.org/org/springframework/cloud/aws/sample/spring-cloud-aws-reference-app/1.0.0-BUILD/spring-cloud-aws-reference-app-1.0.0-BUILD.war -O application.jar","\n",
-                    "nohup java -jar application.jar > application.log & \n","\n"
+                    "nohup java -jar application.jar --rdsPassword=",
+                    { "Ref": "RdsPassword" },
+                    " > application.log & \n","\n"
                 ]]}}
             }
         },

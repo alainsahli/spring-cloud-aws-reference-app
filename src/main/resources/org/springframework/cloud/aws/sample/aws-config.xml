@@ -51,8 +51,7 @@
     <!-- SNS -->
     <aws-messaging:notification-messaging-template id="notificationMessagingTemplate"/>
 
-    <!-- TODO: Add password to external configuration -->
-    <aws-jdbc:dataSource id="dataSource" db-instance-identifier="RdsInstance" password="verySecret"/>
+    <aws-jdbc:dataSource id="dataSource" db-instance-identifier="RdsInstance" password="${rdsPassword}"/>
 
     <aws-context:context-instance-placeholder/>
 

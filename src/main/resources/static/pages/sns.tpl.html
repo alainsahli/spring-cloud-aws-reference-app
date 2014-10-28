@@ -38,15 +38,15 @@
                 <thead>
                 <tr>
                     <th>Received on</th>
-                    <th>Message</th>
                     <th>Subject</th>
+                    <th>Message</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="row in sns.responses">
                     <td>{{ row.timestamp | date : 'mediumTime' }}</td>
-                    <td>{{ row.data.message }}</td>
                     <td>{{ row.data.subject }}</td>
+                    <td>{{ row.data.message }}</td>
                 </tr>
                 </tbody>
             </table>
