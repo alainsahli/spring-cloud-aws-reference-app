@@ -20,3 +20,7 @@ a.home-icon {
 .nav > li > a {
     padding: 0 15px 8px 15px;
 }
+
+.logo {
+    opacity: 0.75;
+}
