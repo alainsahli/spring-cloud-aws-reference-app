@@ -16,10 +16,14 @@
 
 package org.springframework.cloud.aws.sample.source;
 
+import java.io.Serializable;
+
 /**
  * @author Alain Sahli
  */
-public class SourceFile {
+public class SourceFile implements Serializable {
+
+    private static final long serialVersionUID = 2492820396362373751L;
 
     private final String content;
 

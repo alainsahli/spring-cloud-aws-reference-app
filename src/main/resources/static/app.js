@@ -38,7 +38,7 @@
                 SourceCodeService.getSourceCode(scope.path).then(function (response) {
                     scope.code = response.data.content;
                     scope.link = response.data.url;
-                    scope.title = response.data.url.substr(response.data.url.lastIndexOf('/') + 1);
+                    scope.title = response.data.name;
                     $timeout(function () {
                         hljs.highlightBlock(element.find('code')[0]);
                     });
