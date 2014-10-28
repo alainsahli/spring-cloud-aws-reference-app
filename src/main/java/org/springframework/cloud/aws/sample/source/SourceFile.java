@@ -25,9 +25,12 @@ public class SourceFile {
 
     private final String url;
 
-    public SourceFile(String content, String url) {
+    private final String name;
+
+    public SourceFile(String content, String url, String name) {
         this.content = content;
         this.url = url;
+        this.name = name;
     }
 
     public String getContent() {
@@ -36,5 +39,9 @@ public class SourceFile {
 
     public String getUrl() {
         return this.url;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

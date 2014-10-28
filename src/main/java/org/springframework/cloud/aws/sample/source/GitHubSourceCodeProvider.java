@@ -42,6 +42,40 @@ public class GitHubSourceCodeProvider implements SourceCodeProvider {
     public SourceFile getSourceFileContent(String path) {
         @SuppressWarnings("unchecked")
         Map<String, String> result = this.restTemplate.getForObject(BASE_URL + path, Map.class);
-        return new SourceFile(new String(Base64.decodeBase64(result.get("content"))), result.get("html_url"));
+        String fileName = result.get("name");
+        return new SourceFile(getContentWithoutLicenseBlock(result.get("content"), fileName), result.get("html_url"), fileName);
+    }
+
+    private String getContentWithoutLicenseBlock(String content, String fileName) {
+        String ext = fileName.substring(fileName.lastIndexOf('.'));
+        int licenseStart = 0;
+        int licenseEnd = 0;
+        String decodedContent = new String(Base64.decodeBase64(content));
+
+        switch (ext) {
+            case ".java":
+                licenseStart = 0;
+                licenseEnd = 14;
+                break;
+            case".xml":
+                licenseStart = 1;
+                licenseEnd = 15;
+                break;
+            default:
+                return decodedContent;
+        }
+
+        String[] contentLines = decodedContent.split("\n");
+        StringBuilder stringBuilder = new StringBuilder();
+        int i = 0;
+        for (String contentLine : contentLines) {
+            if (i < licenseStart || i > licenseEnd) {
+                stringBuilder.append(contentLine);
+                stringBuilder.append("\n");
+            }
+            i++;
+        }
+
+        return stringBuilder.toString();
     }
 }
