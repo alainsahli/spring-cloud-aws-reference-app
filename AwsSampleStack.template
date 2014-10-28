@@ -261,7 +261,7 @@
                 ]
             }
         },
-        "ElasticacheSecurityGroup": {
+        "CacheSecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "DependsOn" : "WebSecurityGroup",
             "Properties": {
@@ -283,7 +283,7 @@
                 "CacheNodeType": "cache.t2.micro",
                 "CacheSubnetGroupName" : { "Ref" : "CacheSubnetGroup" },
                 "NumCacheNodes": "1",
-                "VpcSecurityGroupIds": [{"Fn::GetAtt": [ "ElasticacheSecurityGroup", "GroupId"]}]
+                "VpcSecurityGroupIds": [{"Fn::GetAtt": [ "CacheSecurityGroup", "GroupId"]}]
             }
         },
         "CacheSubnetGroup" : {
