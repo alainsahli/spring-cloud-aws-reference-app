@@ -43,6 +43,7 @@
     <beans profile="!local">
         <aws-cache:cache-manager>
             <aws-cache:cache-cluster name="CacheCluster" expiration="10"/>
+            <aws-cache:cache-cluster name="GitHubSourceCode" expiration="3600"/>
         </aws-cache:cache-manager>
     </beans>
 </beans>

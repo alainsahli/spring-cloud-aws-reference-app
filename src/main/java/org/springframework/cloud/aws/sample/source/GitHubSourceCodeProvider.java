@@ -1,6 +1,7 @@
 package org.springframework.cloud.aws.sample.source;
 
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,6 +22,7 @@ public class GitHubSourceCodeProvider implements SourceCodeProvider {
     }
 
     @Override
+    @Cacheable(value = "GitHubSourceCode")
     public SourceFile getSourceFileContent(String path) {
         @SuppressWarnings("unchecked")
         Map<String, String> result = this.restTemplate.getForObject(BASE_URL + path, Map.class);

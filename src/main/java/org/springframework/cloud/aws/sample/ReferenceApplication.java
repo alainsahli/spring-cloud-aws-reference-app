@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -12,7 +13,8 @@ import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.*;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Alain Sahli
@@ -40,7 +42,11 @@ public class ReferenceApplication implements EmbeddedServletContainerCustomizer 
     @Profile("local")
     public CacheManager createSimpleCacheManager() {
         SimpleCacheManager simpleCacheManager = new SimpleCacheManager();
-        simpleCacheManager.setCaches(Collections.singleton(new ConcurrentMapCache("CacheCluster")));
+        List<Cache> caches = new ArrayList<>(2);
+        caches.add(new ConcurrentMapCache("CacheCluster"));
+        caches.add(new ConcurrentMapCache("GitHubSourceCode"));
+        simpleCacheManager.setCaches(caches);
+
         return simpleCacheManager;
     }
 }
